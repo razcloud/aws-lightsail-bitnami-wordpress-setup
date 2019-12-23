@@ -1,0 +1,125 @@
+---
+- name: "Raz WordPress Setup & Optimization"
+  hosts: localhost
+  connection: local
+  tasks:
+     - name: Install git
+       apt:
+         name: git
+         state: present
+         update_cache: yes
+     - name: Remove Bitnami WordPress Banner
+       shell:
+         cmd: /opt/bitnami/apps/wordpress/bnconfig --disable_banner 1
+       become: true
+     - name: Edit php post_max_size
+       ini_file:
+          path: /opt/bitnami/php/etc/php.ini
+          section: PHP
+          option: post_max_size
+          value: 4G
+          backup: true
+       become: true
+     - name: Edit php upload_max_filesize
+       ini_file:
+          path: /opt/bitnami/php/etc/php.ini
+          section: PHP
+          option: upload_max_filesize
+          value: 4G
+          backup: true
+       become: true
+     - name: Edit php memory_limit
+       ini_file:
+          path: /opt/bitnami/php/etc/php.ini
+          section: PHP
+          option: memory_limit
+          value: 256M
+          backup: true
+       become: true
+     - name: Edit php max_execution_time
+       ini_file:
+          path: /opt/bitnami/php/etc/php.ini
+          section: PHP
+          option: max_execution_time
+          value: '300'
+          backup: true
+       become: true
+     - name: Edit php max_input_vars
+       ini_file:
+          path: /opt/bitnami/php/etc/php.ini
+          section: PHP
+          option: max_input_vars
+          value: '2000'
+          backup: true
+       become: true
+     - name: Disable pagespeed.conf
+       replace:
+          path: /opt/bitnami/apache2/conf/httpd.conf
+          regexp: 'Include conf/pagespeed.conf'
+          replace: '#Include conf/pagespeed.conf'
+          backup: true
+       become: true
+     - name: Disable pagespeed_libraries.conf
+       replace:
+          path: /opt/bitnami/apache2/conf/httpd.conf
+          regexp: 'Include conf/pagespeed_libraries.conf'
+          replace: '#Include conf/pagespeed_libraries.conf'
+          backup: true
+       become: true
+     - name: Enable mod_expires
+       replace:
+          path: /opt/bitnami/apache2/conf/httpd.conf
+          regexp: '#LoadModule expires_module modules/mod_expires.so'
+          replace: 'LoadModule expires_module modules/mod_expires.so'
+          backup: true
+       become: true
+     - name: Enable mod_ext_filter
+       replace:
+          path: /opt/bitnami/apache2/conf/httpd.conf
+          regexp: '#LoadModule ext_filter_module modules/mod_ext_filter.so'
+          replace: 'LoadModule ext_filter_module modules/mod_ext_filter.so'
+          backup: true
+       become: true
+     - name: Enable mod_http2
+       replace:
+          path: /opt/bitnami/apache2/conf/httpd.conf
+          regexp: '#LoadModule http2_module modules/mod_http2.so'
+          replace: 'LoadModule http2_module modules/mod_http2.so'
+          backup: true
+       become: true
+     - name: Enable php extension imagick
+       replace:
+          path: /opt/bitnami/php/etc/php.ini
+          regexp: ';extension=imagick.so'
+          replace: 'extension=imagick.so'
+          backup: true
+       become: true
+     - name: Enable .htaccess for WordPress
+       replace:
+          path: /opt/bitnami/apps/wordpress/conf/httpd-app.conf
+          regexp: 'AllowOverride None'
+          replace: 'AllowOverride All'
+          backup: true
+       become: true
+     - name: Change ownership to bitnami:daemon for WordPress
+       shell:
+         cmd: "chown -R bitnami:daemon /opt/bitnami/apps/wordpress/htdocs"
+         warn: false
+       become: true
+     - name: Change directory permissions to 775 
+       shell:
+         cmd: "find /opt/bitnami/apps/wordpress/htdocs -type d -print0 | xargs -0 chmod 775"
+       become: true
+     - name: Change file permissions to 664 
+       shell:
+         cmd: "find /opt/bitnami/apps/wordpress/htdocs -type f -print0 | xargs -0 chmod 664"
+       become: true
+     - name: Flush pagespeed cache
+       file:
+         path: /opt/bitnami/apache2/var/cache/mod_pagespeed/cache.flush
+         state: touch
+       become: true
+     - name: Restart Bitnami
+       shell:
+         cmd: /opt/bitnami/ctlscript.sh restart
+       become: true
