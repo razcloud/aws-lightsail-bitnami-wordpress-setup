@@ -3,11 +3,6 @@
   hosts: localhost
   connection: local
   tasks:
-     - name: Install git
-       apt:
-         name: git
-         state: present
-         update_cache: yes
      - name: Remove Bitnami WordPress Banner
        shell:
          cmd: /opt/bitnami/apps/wordpress/bnconfig --disable_banner 1
