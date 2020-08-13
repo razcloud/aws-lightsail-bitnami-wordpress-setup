@@ -1,5 +1,7 @@
 #!/bin/bash
 cd && pwd
+echo "TASK [Install GIT]"
+sudo apt-get install git -y
 echo "SCRIPT [Setting up server with Ansible]"
 echo "TASK [Install PPA]"
 sudo apt-get install software-properties-common -y
