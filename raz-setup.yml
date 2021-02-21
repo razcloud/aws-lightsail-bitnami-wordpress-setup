@@ -28,7 +28,7 @@
           path: /opt/bitnami/php/etc/php.ini
           section: PHP
           option: memory_limit
-          value: 128M
+          value: 256M
           backup: true
        become: true
      - name: Edit php max_execution_time
