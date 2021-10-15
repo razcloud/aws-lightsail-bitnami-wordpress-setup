@@ -85,25 +85,18 @@
           replace: 'extension=imagick.so'
           backup: true
        become: true
-     - name: Enable .htaccess for WordPress
-       replace:
-          path: /opt/bitnami/apps/wordpress/conf/httpd-app.conf
-          regexp: 'AllowOverride None'
-          replace: 'AllowOverride All'
-          backup: true
-       become: true
      - name: Change ownership to bitnami:daemon for WordPress
        shell:
-         cmd: "chown -R bitnami:daemon /opt/bitnami/apps/wordpress/htdocs"
+         cmd: "chown -R bitnami:daemon /opt/bitnami/wordpress/htdocs"
          warn: false
        become: true
      - name: Change directory permissions to 775 
        shell:
-         cmd: "find /opt/bitnami/apps/wordpress/htdocs -type d -print0 | xargs -0 chmod 775"
+         cmd: "find /opt/bitnami/wordpress/htdocs -type d -print0 | xargs -0 chmod 775"
        become: true
      - name: Change file permissions to 664 
        shell:
-         cmd: "find /opt/bitnami/apps/wordpress/htdocs -type f -print0 | xargs -0 chmod 664"
+         cmd: "find /opt/bitnami/wordpress/htdocs -type f -print0 | xargs -0 chmod 664"
        become: true
      - name: Flush pagespeed cache
        file:
