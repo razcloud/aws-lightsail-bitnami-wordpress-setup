@@ -3,10 +3,6 @@
   hosts: localhost
   connection: local
   tasks:
-     - name: Remove Bitnami WordPress Banner
-       shell:
-         cmd: /opt/bitnami/apps/wordpress/bnconfig --disable_banner 1
-       become: true
      - name: Edit php post_max_size
        ini_file:
           path: /opt/bitnami/php/etc/php.ini
