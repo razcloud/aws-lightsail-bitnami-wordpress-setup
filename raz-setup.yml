@@ -8,7 +8,7 @@
           path: /opt/bitnami/php/etc/php.ini
           section: PHP
           option: post_max_size
-          value: 5G
+          value: 10G
           backup: true
        become: true
      - name: Edit php upload_max_filesize
@@ -16,7 +16,7 @@
           path: /opt/bitnami/php/etc/php.ini
           section: PHP
           option: upload_max_filesize
-          value: 5G
+          value: 10G
           backup: true
        become: true
      - name: Edit php memory_limit
