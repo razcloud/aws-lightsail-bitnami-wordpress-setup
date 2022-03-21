@@ -19,7 +19,7 @@ echo "TASK [Create raz_playbooks Directory]"
 cd && pwd && mkdir "raz_playbooks" && cd "raz_playbooks" && pwd
 
 echo "TASK [Git Glone]"
-git clone https://github.com/CopaceticVT/aws-lightsail-bitnami-wordpress-setup.git
+git clone https://github.com/razcloud/aws-lightsail-bitnami-wordpress-setup.git
 
 echo "TASK [Change to Project Directory]"
 cd aws-lightsail-bitnami-wordpress-setup
